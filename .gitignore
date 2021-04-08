@@ -17,3 +17,6 @@
 # Config
 .idea
 conf/app.ini
+
+# Github issue Template
+.github
