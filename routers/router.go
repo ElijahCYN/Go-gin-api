@@ -2,6 +2,7 @@ package routers
 
 import (
 	"github.com/ElijahCYN/Go-gin-api/pkg/setting"
+	v1 "github.com/ElijahCYN/Go-gin-api/routers/api/v1"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,11 +15,17 @@ func InitRouter() *gin.Engine {
 
 	gin.SetMode(setting.RunMode)
 
-	r.GET("/test", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "test",
-		})
-	})
+	apiv1 := r.Group("/api/v1")
+	{
+		// 獲取標籤列表
+		apiv1.GET("/tags", v1.GetTags)
+		// 新增標籤
+		apiv1.POST("/tags", v1.AddTag)
+		// 更新指定標籤
+		apiv1.PUT("/tags/:id", v1.EditTag)
+		// 刪除指定標籤
+		apiv1.DELETE("/tags/:id", v1.DeleteTag)
+	}
 
 	return  r
 }
