@@ -20,3 +20,6 @@ conf/app.ini
 
 # Github issue Template
 .github
+
+# Log
+runtime/logs
