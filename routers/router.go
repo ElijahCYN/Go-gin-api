@@ -1,11 +1,14 @@
 package routers
 
 import (
+	_ "github.com/ElijahCYN/Go-gin-api/docs"
 	jwt "github.com/ElijahCYN/Go-gin-api/middleware"
 	"github.com/ElijahCYN/Go-gin-api/pkg/setting"
 	"github.com/ElijahCYN/Go-gin-api/routers/api"
 	v1 "github.com/ElijahCYN/Go-gin-api/routers/api/v1"
 	"github.com/gin-gonic/gin"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
 func InitRouter() *gin.Engine {
@@ -18,6 +21,7 @@ func InitRouter() *gin.Engine {
 	gin.SetMode(setting.RunMode)
 
 	r.GET("/auth", api.GetAuth)
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	apiv1 := r.Group("/api/v1")
 	apiv1.Use(jwt.JWT())
