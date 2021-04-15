@@ -55,3 +55,13 @@ func LoadApp()  {
 	JwtSecret = sec.Key("JWT_SECRET").MustString("!@)*#)!@U#@*!@!)")
 	PageSize = sec.Key("PAGE_SIZE").MustInt(10)
 }
+
+type Redis struct {
+	Host string
+	Password string
+	MaxIdle int
+	MaxActive int
+	IdleTimeout time.Duration
+}
+
+var RedisSetting = &Redis{}
