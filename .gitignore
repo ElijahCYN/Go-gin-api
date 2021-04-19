@@ -27,3 +27,6 @@ runtime/logs
 # DS_Store
 .DS_Store
 pkg/.DS_Store
+
+# Log
+runtime/logs
