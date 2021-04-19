@@ -1,45 +1,33 @@
 package main
 
 import (
-	"context"
 	"fmt"
+	"github.com/ElijahCYN/Go-gin-api/models"
+	"github.com/ElijahCYN/Go-gin-api/pkg/logging"
 	"github.com/ElijahCYN/Go-gin-api/pkg/setting"
 	"github.com/ElijahCYN/Go-gin-api/routers"
+	"github.com/fvbock/endless"
 	"log"
-	"net/http"
-	"os"
-	"os/signal"
-	"time"
+	"syscall"
 )
 
 func main()  {
-	router := routers.InitRouter()
+	setting.Setup()
+	models.Setup()
+	logging.Setup()
 
-	s := &http.Server{
-		Addr: fmt.Sprintf(":%d", setting.HTTPPort),
-		Handler: router,
-		ReadTimeout: setting.ReadTimeout,
-		WriteTimeout: setting.WriteTimeout,
-		MaxHeaderBytes: 1 << 20,
+	endless.DefaultReadTimeOut = setting.ServerSetting.ReadTimeout
+	endless.DefaultWriteTimeOut = setting.ServerSetting.WriteTimeout
+	endless.DefaultMaxHeaderBytes = 1 << 20
+	endPoint := fmt.Sprintf(":%d", setting.ServerSetting.HttpPort)
+
+	server := endless.NewServer(endPoint, routers.InitRouter())
+	server.BeforeBegin = func(add string) {
+		log.Printf("Actual pid is %d", syscall.Getpid())
 	}
 
-	go func() {
-		if err := s.ListenAndServe(); err != nil {
-			log.Printf("Listen: %s\n", err)
-		}
-	}()
-
-	quit := make(chan os.Signal)
-	signal.Notify(quit, os.Interrupt)
-	<- quit
-
-	log.Println("Shutdown Server ...")
-
-	ctx, cancel := context.WithTimeout(context.Background(), 5 * time.Second)
-	defer cancel()
-	if err := s.Shutdown(ctx); err != nil {
-		log.Fatal("Server Shutdown:", err)
+	err := server.ListenAndServe()
+	if err != nil {
+		log.Printf("Server err: %v", err)
 	}
-
-	log.Println("Server exiting")
 }
