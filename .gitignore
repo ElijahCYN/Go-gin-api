@@ -30,3 +30,6 @@ pkg/.DS_Store
 
 # Log
 runtime/logs
+
+# Image
+runtime/upload
