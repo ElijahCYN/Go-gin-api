@@ -21,15 +21,10 @@ conf/app.ini
 # Github issue Template
 .github
 
-# Log
+# Log, Image
 runtime/logs
+runtime/upload
 
 # DS_Store
 .DS_Store
 pkg/.DS_Store
-
-# Log
-runtime/logs
-
-# Image
-runtime/upload
